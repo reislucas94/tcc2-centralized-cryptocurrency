@@ -1,5 +1,10 @@
 from central.block import Block
+from central.core import generatePrivateKey, generatePublicKey
+from Crypto.PublicKey import RSA #https://pycryptodome.readthedocs.io/en/latest/src/examples.html#generate-public-key-and-private-key
 
-firstBlock = Block("batata", 123, "txs2", "lukaku", "kakeke")
+key = RSA.generate(2048)
 
-print(firstBlock.initValue)
+generatePrivateKey(key)
+generatePublicKey(key)
+
+
