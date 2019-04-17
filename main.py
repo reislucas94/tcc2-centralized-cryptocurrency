@@ -7,4 +7,5 @@ key = RSA.generate(2048)
 generatePrivateKey(key)
 generatePublicKey(key)
 
+currentInit = 500
 
