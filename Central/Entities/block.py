@@ -1,7 +1,7 @@
 class Block:
-    def __init__ (self, initValue, initGoesTo, dataSet, nonce, blockHash):
+    def __init__ (self, initValue, initDestination, dataSet, nonce, blockHash):
         self.initValue = initValue
-        self.initGoesTo = initGoesTo
+        self.initDestination = initDestination
         self.dataSet = dataSet
         self.nonce = nonce
         self.blockHash = blockHash

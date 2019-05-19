@@ -1,11 +1,28 @@
 from Central.Entities.block import Block
-from Central.core import generatePrivateKey, generatePublicKey
+from Central.CentralCore import *
+from Central.CentralCore import *
 from Crypto.PublicKey import RSA #https://pycryptodome.readthedocs.io/en/latest/src/examples.html#generate-public-key-and-private-key
 
-key = RSA.generate(2048)
+#key = RSA.generate(2048)
 
-generatePrivateKey(key)
-generatePublicKey(key)
+#generatePrivateKey(key)
+#generatePublicKey(key)
 
-currentInit = 500
+#currentInit = 500
 
+
+#CentralRoutine
+initValue = getBlockInit()
+initDestination = getInitDestination()
+getAllTransfers()
+putIntoBlock()
+
+#MiningRoutine
+checkIfTransfersSignaturesAreOk()
+checkIfTransfersHaveFunds()
+calculateHashOfTransfersByPairs()
+calculateBlockHash()
+signalizeEverythingIsFine()
+
+#CentralRoutine
+publishBlock()

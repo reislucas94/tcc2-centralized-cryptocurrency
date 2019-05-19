@@ -1,0 +1,15 @@
+{
+    "previousBlockHash": "0",
+    
+    "initValue": 500.00,
+
+    "initDestination": "17040189003",
+
+    "dataSet":{
+
+    },
+
+    "nonce": 0,
+
+    "blockHash": ""
+}
