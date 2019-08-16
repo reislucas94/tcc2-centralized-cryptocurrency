@@ -1,3 +1,4 @@
+import os
 from Crypto.PublicKey import RSA #https://pycryptodome.readthedocs.io/en/latest/src/examples.html#generate-public-key-and-private-key
 
 def generatePublicKey(key):
@@ -25,3 +26,11 @@ def putIntoBlock(input):
 def publishBlock(input):
     return input
 
+def getLastBlockNumber():
+    #Detects last block number
+    lastBlockNumber = 0 
+    for filename in os.listdir('Central/Databases/Blocks/'):
+        if filename.endswith('.json'):
+            blockNumber = filename.replace('block','').replace('.json','')
+            if int(blockNumber) >= lastBlockNumber : lastBlockNumber = int(blockNumber)
+    return lastBlockNumber

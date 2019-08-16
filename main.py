@@ -16,10 +16,10 @@ initValue = getBlockInit()
 initDestination = getInitDestination()
 getAllTransfers()
 putIntoBlock()
-
-#MiningRoutine
 checkIfTransfersSignaturesAreOk()
 checkIfTransfersHaveFunds()
+
+#MiningRoutine
 calculateHashOfTransfersByPairs()
 calculateBlockHash()
 signalizeEverythingIsFine()
