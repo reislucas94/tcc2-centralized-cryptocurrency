@@ -1,36 +1,36 @@
 import os
 from Crypto.PublicKey import RSA #https://pycryptodome.readthedocs.io/en/latest/src/examples.html#generate-public-key-and-private-key
 
-def generatePublicKey(key):
+def generate_private_key(key):
     private_key = key.export_key()
     file_out = open("central/keyring/privateK.pem", "wb")
     file_out.write(private_key)
 
-def generatePrivateKey(key):
+def generate_public_key(key):
     public_key = key.publickey().export_key()
     file_out = open("central/keyring/publicK.pem", "wb")
     file_out.write(public_key)
 
-def getBlockInit():
+def get_block_init():
     return 500
 
-def getInitDestination():
+def get_init_destination():
     return "17040189003"
 
-def getAllTransfers(input):
+def get_all_transfers(input):
     return input
 
-def putIntoBlock(input):
+def put_into_block(input):
     return input
 
-def publishBlock(input):
+def publish_block(input):
     return input
 
-def getLastBlockNumber():
+def get_last_block_number():
     #Detects last block number
-    lastBlockNumber = 0 
+    last_block_number = 0 
     for filename in os.listdir('Central/Databases/Blocks/'):
         if filename.endswith('.json'):
-            blockNumber = filename.replace('block','').replace('.json','')
-            if int(blockNumber) >= lastBlockNumber : lastBlockNumber = int(blockNumber)
-    return lastBlockNumber
+            block_number = filename.replace('block','').replace('.json','')
+            if int(block_number) >= last_block_number : last_block_number = int(block_number)
+    return last_block_number
