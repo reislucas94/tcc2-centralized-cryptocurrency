@@ -2,7 +2,7 @@
     "previous_block_hash": "0",
     "init_value": 500.0,
     "init_destination": "17040189003",
-    "tx_dataset": {},
+    "tx_dataset": [],
     "block_nonce": 1382,
     "block_hash": "000a7f2fa797466df0e42b40c7724aedcfb97d9c0c389415d66507492be0d979"
 }
