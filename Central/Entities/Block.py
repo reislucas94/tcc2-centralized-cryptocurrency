@@ -1,4 +1,4 @@
-from Entities.Transaction import Transaction as Transaction
+from ..Entities.Transaction import Transaction as Transaction
 from typing import List
 class Block:
     def __init__ (self, previous_block_hash: str, init_value:float, init_destination:str, tx_dataset:List[Transaction], block_nonce:int, block_hash:str):
