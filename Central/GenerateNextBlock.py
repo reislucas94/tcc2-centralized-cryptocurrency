@@ -1,8 +1,8 @@
 import json, os
-from CentralCore import get_last_block_number
+from .CentralCore import get_last_block_number
 from Crypto.Hash import SHA256
-from Entities.Block import Block as Block
-from Entities.Transaction import Transaction as Transaction
+from .Entities.Block import Block as Block
+from .Entities.Transaction import Transaction as Transaction
 
 #Detects which block was the last generated one
 last_block_number = get_last_block_number()

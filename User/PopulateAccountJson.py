@@ -1,8 +1,8 @@
 import json
 from Crypto.PublicKey import RSA
-from UserCore import generate_private_key, generate_public_key
-from Entities.Account import Account as Account
-from Entities.Account import AccountList as AccountList
+from .UserCore import generate_private_key, generate_public_key
+from .Entities.Account import Account as Account
+from .Entities.Account import AccountList as AccountList
 
 
 file_out = open(r'User/Databases/accounts.json')
