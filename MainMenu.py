@@ -8,7 +8,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from AddTransactionsWindow import Ui_add_transactions_window1 as AddTransactionsWindow
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -40,7 +40,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-        self.addTransactionsButton.clicked.connect(self.openAddTransactionWindow)
+        self.addTransactionsButton.clicked.connect(self.openAddTransactionsWindow)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -49,8 +49,12 @@ class Ui_MainWindow(object):
         self.label.setText(_translate("MainWindow", "Centralized Blockchain"))
         self.pushButton.setText(_translate("MainWindow", "Show All Blocks"))
 
-    def openAddTransactionWindow(self):
-        print ("hello")
+    def openAddTransactionsWindow(self):
+        print ("Opening AddTransactionsWindow ...")
+        self.window = QtWidgets.QMainWindow()
+        self.ui = AddTransactionsWindow()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
 if __name__ == "__main__":
     import sys
