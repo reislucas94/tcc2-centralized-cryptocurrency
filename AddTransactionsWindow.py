@@ -61,8 +61,10 @@ class Ui_add_transactions_window1(object):
     def openAddTransactionsWindow(self):
         try:
             PushTransactionToNextBlock.push(self.transfered_from_input1.text(), self.transfered_to_input1.text(), float(self.amount_transfered_input1.text()))
-        except:
-            pass
+        except Exception as ex:
+            error_dialog = QtWidgets.QErrorMessage()
+            error_dialog.showMessage(str(ex))
+            error_dialog.exec_()
 
 if __name__ == "__main__":
     import sys
