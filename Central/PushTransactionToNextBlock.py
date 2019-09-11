@@ -8,13 +8,13 @@ sys.path.append("..")
 from User.Entities.Account import AccountList as AccountList
 
 def push(from_idn: str, to_idn: str, amount: float):
-    if check_if_valid_account(from_idn) and \
-        check_if_valid_account(to_idn) and \
-        check_if_has_balance(from_idn, amount):
+    if __check_if_valid_account(from_idn) and \
+        __check_if_valid_account(to_idn) and \
+        __check_if_has_balance(from_idn, amount):
         
         print ('Transfer is valid')
 
-def check_if_valid_account(idn:str):
+def __check_if_valid_account(idn:str):
     try:
         file_out = open(r'User/Databases/accounts.json')
         accounts_file = file_out.read()
@@ -29,7 +29,7 @@ def check_if_valid_account(idn:str):
             raise Exception("Account '{}' does not exist.".format(idn))
     
 
-def check_if_has_balance(sender_idn: str, amount_transfered: float):
+def __check_if_has_balance(sender_idn: str, amount_transfered: float):
     last_block_number = get_last_block_number()
     current_balance=0
     for i in range(last_block_number+1):
