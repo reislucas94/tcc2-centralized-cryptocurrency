@@ -9,6 +9,11 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import Central.PushTransactionToNextBlock as PushTransactionToNextBlock
+from Central.CentralCore import form_transaction as form_transaction
+from Central.CentralCore import sign_transaction as sign_transaction
+import time
+from Central.Entities.Transaction import Transaction as Transaction
+
 
 class Ui_add_transactions_window1(object):
     def setupUi(self, add_transactions_window1):
@@ -60,7 +65,12 @@ class Ui_add_transactions_window1(object):
 
     def openAddTransactionsWindow(self):
         try:
-            PushTransactionToNextBlock.push(self.transfered_from_input1.text(), self.transfered_to_input1.text(), float(self.amount_transfered_input1.text()))
+            if PushTransactionToNextBlock._check_if_valid_account(self.transfered_from_input1.text()) and \
+                PushTransactionToNextBlock._check_if_valid_account(self.transfered_to_input1.text()):
+
+                tx = form_transaction(time.time(), self.transfered_from_input1.text(), float(self.amount_transfered_input1.text()), self.transfered_to_input1.text())
+
+                PushTransactionToNextBlock.push(Transaction(tx).get_sender_idn(), Transaction(tx).get_amount_transfered(), Transaction(tx).get_receiver_idn(), sign_transaction(tx))
         except Exception as ex:
             error_dialog = QtWidgets.QErrorMessage()
             error_dialog.showMessage(str(ex))
