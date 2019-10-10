@@ -3,6 +3,8 @@ from Crypto.PublicKey import RSA #https://pycryptodome.readthedocs.io/en/latest/
 from .Entities.Transaction import Transaction as Transaction
 from .Dto.AccountsDto import AccountsDto as AccountsDto
 from Crypto.Cipher import PKCS1_OAEP
+from Crypto.Signature import pkcs1_15
+from Crypto.Hash import SHA256
 
 def generate_private_key(key):
     private_key = key.export_key()
@@ -20,11 +22,19 @@ def form_transaction(time: float, sender_idn: str, amount_transfered: float, rec
 def sign_transaction(tx : str):
     sender_idn = Transaction(tx).get_sender_idn()
     private_key = RSA.import_key(AccountsDto(sender_idn).get_account_private_key())
-    cipher = PKCS1_OAEP.new(key=private_key)
-    cipher_text = cipher.encrypt(tx)
-    return cipher_text
+    hash_message = SHA256.new(tx.encode('utf-8'))
+    signature = pkcs1_15.new(private_key).sign(hash_message)
+    return signature
 
-def check_signature(tx: str):
+def check_signature(tx: str, signature):
+    sender_idn = Transaction(tx).get_sender_idn()
+    public_key = RSA.import_key(AccountsDto(sender_idn).get_account_public_key())
+    hash_message = SHA256.new(tx.encode('utf-8'))
+    try:
+        pkcs1_15.new(public_key).verify(hash_message, signature)
+        print ('The signature is valid.')
+    except (ValueError, TypeError):
+        print ('The signature is not valid.')    
     return True
 
 def get_block_init():

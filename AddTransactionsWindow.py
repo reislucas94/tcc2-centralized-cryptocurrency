@@ -23,13 +23,14 @@ class Ui_add_transactions_window1(object):
         self.centralwidget.setObjectName("centralwidget")
         self.transfered_from_input1 = QtWidgets.QLineEdit(self.centralwidget)
         self.transfered_from_input1.setGeometry(QtCore.QRect(50, 200, 150, 21))
-        self.transfered_from_input1.setText("")
+        self.transfered_from_input1.setText("39620880080")
         self.transfered_from_input1.setObjectName("transfered_from_input1")
         self.from_label1 = QtWidgets.QLabel(self.centralwidget)
         self.from_label1.setGeometry(QtCore.QRect(50, 180, 60, 16))
         self.from_label1.setObjectName("from_label1")
         self.transfered_to_input1 = QtWidgets.QLineEdit(self.centralwidget)
         self.transfered_to_input1.setGeometry(QtCore.QRect(450, 200, 150, 21))
+        self.transfered_to_input1.setText("17040189003")
         self.transfered_to_input1.setObjectName("transfered_to_input1")
         self.amount_transfered_input1 = QtWidgets.QLineEdit(self.centralwidget)
         self.amount_transfered_input1.setGeometry(QtCore.QRect(250, 200, 150, 24))
@@ -70,7 +71,7 @@ class Ui_add_transactions_window1(object):
 
                 tx = form_transaction(time.time(), self.transfered_from_input1.text(), float(self.amount_transfered_input1.text()), self.transfered_to_input1.text())
 
-                PushTransactionToNextBlock.push(Transaction(tx).get_sender_idn(), Transaction(tx).get_amount_transfered(), Transaction(tx).get_receiver_idn(), sign_transaction(tx))
+                PushTransactionToNextBlock.push(Transaction(tx).get_sender_idn(), Transaction(tx).get_receiver_idn(), Transaction(tx).get_amount_transfered(), sign_transaction(tx))
         except Exception as ex:
             error_dialog = QtWidgets.QErrorMessage()
             error_dialog.showMessage(str(ex))
