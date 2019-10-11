@@ -12,27 +12,39 @@ from AddTransactionsWindow import Ui_add_transactions_window1 as AddTransactions
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
+
+        #Main window
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 600)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+
+        #Add Transaction Button
         self.addTransactionsButton = QtWidgets.QPushButton(self.centralwidget)
         self.addTransactionsButton.setGeometry(QtCore.QRect(320, 400, 161, 32))
         self.addTransactionsButton.setObjectName("addTransactionsButton")
+
+
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(310, 110, 341, 91))
         font = QtGui.QFont()
         font.setPointSize(18)
         self.label.setFont(font)
         self.label.setObjectName("label")
+
+
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setGeometry(QtCore.QRect(330, 360, 141, 32))
         self.pushButton.setObjectName("pushButton")
         MainWindow.setCentralWidget(self.centralwidget)
+
+
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 22))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
+
+        
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
