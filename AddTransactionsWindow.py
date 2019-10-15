@@ -13,6 +13,7 @@ from Central.CentralCore import form_transaction as form_transaction
 from Central.CentralCore import sign_transaction as sign_transaction
 import time
 from Central.Entities.Transaction import Transaction as Transaction
+import json
 
 XSIZE = 1200
 YSIZE = 800
@@ -26,7 +27,7 @@ class Ui_add_transactions_window1(object):
 
         self.transfered_from_input1 = QtWidgets.QLineEdit(self.centralwidget)
         self.transfered_from_input1.setGeometry(QtCore.QRect(50, 200, 150, 21))
-        self.transfered_from_input1.setText("39620880080")
+        self.transfered_from_input1.setText("17040189003")
         self.transfered_from_input1.setObjectName("transfered_from_input1")
 
         self.from_label1 = QtWidgets.QLabel(self.centralwidget)
@@ -40,7 +41,7 @@ class Ui_add_transactions_window1(object):
 
         self.transfered_to_input1 = QtWidgets.QLineEdit(self.centralwidget)
         self.transfered_to_input1.setGeometry(QtCore.QRect(450, 200, 150, 21))
-        self.transfered_to_input1.setText("17040189003")
+        self.transfered_to_input1.setText("39620880080")
         self.transfered_to_input1.setObjectName("transfered_to_input1")
 
         self.amount_transfered_input1
@@ -65,7 +66,7 @@ class Ui_add_transactions_window1(object):
         self.log_font = self.current_block_textarea.font()
         self.log_font.setFamily("Courier")
         self.log_font.setPointSize(10)
-        self.current_block_textarea.setGeometry(QtCore.QRect(50, 250, XSIZE-2*50, 100))
+        self.current_block_textarea.setGeometry(QtCore.QRect(50, 250, XSIZE-2*50, YSIZE-350))
         self.current_block_textarea.setText("Empty.")
 
 
@@ -95,7 +96,10 @@ class Ui_add_transactions_window1(object):
 
                 tx = form_transaction(time.time(), self.transfered_from_input1.text(), float(self.amount_transfered_input1.text()), self.transfered_to_input1.text())
 
-                PushTransactionToNextBlock.push(Transaction(tx).get_sender_idn(), Transaction(tx).get_receiver_idn(), Transaction(tx).get_amount_transfered(), sign_transaction(tx))
+                PushTransactionToNextBlock.push(tx, Transaction(tx).get_sender_idn(), Transaction(tx).get_receiver_idn(), Transaction(tx).get_amount_transfered(), sign_transaction(tx))
+        
+                if json.dumps(PushTransactionToNextBlock.CURRENT_BLOCK_TRANSACTIONS) != '':
+                    self.current_block_textarea.setText(json.dumps(PushTransactionToNextBlock.CURRENT_BLOCK_TRANSACTIONS, indent=4, sort_keys=True))
         except Exception as ex:
             error_dialog = QtWidgets.QErrorMessage()
             error_dialog.showMessage(str(ex))

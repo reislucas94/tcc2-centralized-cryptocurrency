@@ -7,11 +7,17 @@ import sys
 sys.path.append("..")
 from User.Entities.Account import AccountList as AccountList
 
-def push(sender_idn: str, receiver_idn: str, amount: float, sender_signature: str ):
+CURRENT_BLOCK_TRANSACTIONS = {}
+CURRENT_BLOCK_INIT_DESTINATION = '39620880080'
+CURRENT_BLOCK_INIT_VALUE = 0.0
+
+def push(tx: str, sender_idn: str, receiver_idn: str, amount: float, sender_signature: str ):
+    global CURRENT_BLOCK_TRANSACTIONS
+    
     if __check_signature_authenticity(sender_idn, sender_signature) and \
         __check_if_has_balance(sender_idn, amount):
         
-        print ('Transfer is valid')
+        CURRENT_BLOCK_TRANSACTIONS[tx] = sender_signature.hex()
 
 def _check_if_valid_account(idn:str):
     try:
@@ -33,6 +39,9 @@ def __check_signature_authenticity(sender_idn: str, sender_signature: str):
 def __check_if_has_balance(sender_idn: str, amount_transfered: float):
     last_block_number = get_last_block_number()
     current_balance=0
+    global CURRENT_BLOCK_INIT_DESTINATION
+    global CURRENT_BLOCK_INIT_VALUE
+    global CURRENT_BLOCK_TRANSACTIONS
     for i in range(last_block_number+1):
         block_file = open('Central/Databases/Blocks/block{}.json'.format(i), 'r')
         block_file_data = block_file.read()
@@ -40,11 +49,19 @@ def __check_if_has_balance(sender_idn: str, amount_transfered: float):
         block_data_object = json.loads(block_file_data)
         if block_data_object['init_destination'] == sender_idn: 
             current_balance+=block_data_object['init_value']
+        if CURRENT_BLOCK_INIT_DESTINATION == sender_idn:
+            current_balance+=CURRENT_BLOCK_INIT_VALUE
         for tx in block_data_object['tx_dataset']:
             if Transaction(tx).get_sender_idn() == sender_idn:
-                current_balance-=Transaction(tx).get_value_transfered()
+                current_balance-=Transaction(tx).get_amount_transfered()
             if Transaction(tx).get_receiver_idn() == sender_idn:
-                current_balance+=Transaction(tx).get_value_transfered()
+                current_balance+=Transaction(tx).get_amount_transfered()
+        for tx in CURRENT_BLOCK_TRANSACTIONS:
+            if Transaction(tx).get_sender_idn() == sender_idn:
+                current_balance-=Transaction(tx).get_amount_transfered()
+            if Transaction(tx).get_receiver_idn() == sender_idn:
+                current_balance+=Transaction(tx).get_amount_transfered()
+            
     # check also in the block being added
     if current_balance>=amount_transfered:
         return True
