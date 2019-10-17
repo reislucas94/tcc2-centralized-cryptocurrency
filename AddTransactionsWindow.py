@@ -25,48 +25,84 @@ class Ui_add_transactions_window1(object):
         self.centralwidget = QtWidgets.QWidget(add_transactions_window1)
         self.centralwidget.setObjectName("centralwidget")
 
+        #### Init Destination Label ####
+        self.init_dest_label1 = QtWidgets.QLabel(self.centralwidget)
+        self.init_dest_label1.setGeometry(QtCore.QRect(50, 70, 100, 16))
+        self.init_dest_label1.setObjectName("init_dest_label1")
+
+        #### Init Destination Field ####
+        self.init_dest_input1 = QtWidgets.QLineEdit(self.centralwidget)
+        self.init_dest_input1.setGeometry(QtCore.QRect(50, 90, 150, 21))
+        self.init_dest_input1.setText("17040189003")
+        self.init_dest_input1.setObjectName("transfered_from_input1")
+
+        #### Init Value Label ####
+        self.init_value_label1 = QtWidgets.QLabel(self.centralwidget)
+        self.init_value_label1.setGeometry(QtCore.QRect(250, 70, 60, 16))
+        self.init_value_label1.setObjectName("init_value_label1")
+
+        #### Init Value Field ####
+        self.init_value_input1 = QtWidgets.QLineEdit(self.centralwidget)
+        self.init_value_input1.setGeometry(QtCore.QRect(250, 90, 150, 24))
+        self.init_value_input1.setObjectName("amount_transfered_input1")
+        self.init_value_input1.setValidator(QtGui.QDoubleValidator(0.0, 99999.99, 2, self.init_value_input1))
+
+        #### Add Init Button #### 
+        self.add_init_button1 = QtWidgets.QPushButton(self.centralwidget)
+        self.add_init_button1.setGeometry(QtCore.QRect(450, 85, 200, 32))
+        self.add_init_button1.setObjectName("add_init_button1")
+
+        #### From Label #### 
+        self.from_label1 = QtWidgets.QLabel(self.centralwidget)
+        self.from_label1.setGeometry(QtCore.QRect(50, 180, 60, 16))
+        self.from_label1.setObjectName("from_label1")
+
+        #### From Field
         self.transfered_from_input1 = QtWidgets.QLineEdit(self.centralwidget)
         self.transfered_from_input1.setGeometry(QtCore.QRect(50, 200, 150, 21))
         self.transfered_from_input1.setText("17040189003")
         self.transfered_from_input1.setObjectName("transfered_from_input1")
 
-        self.from_label1 = QtWidgets.QLabel(self.centralwidget)
-        self.from_label1.setGeometry(QtCore.QRect(50, 180, 60, 16))
-        self.from_label1.setObjectName("from_label1")
+        #### Amount Label #### 
+        self.amount_label1 = QtWidgets.QLabel(self.centralwidget)
+        self.amount_label1.setGeometry(QtCore.QRect(250, 180, 60, 16))
+        self.amount_label1.setObjectName("amount_label1")
 
+        #### Amount Field #### 
         self.amount_transfered_input1 = QtWidgets.QLineEdit(self.centralwidget)
         self.amount_transfered_input1.setGeometry(QtCore.QRect(250, 200, 150, 24))
         self.amount_transfered_input1.setObjectName("amount_transfered_input1")
         self.amount_transfered_input1.setValidator(QtGui.QDoubleValidator(0.0, 99999.99, 2, self.amount_transfered_input1))
 
+        #### To Label #### 
+        self.to_label1 = QtWidgets.QLabel(self.centralwidget)
+        self.to_label1.setGeometry(QtCore.QRect(450, 180, 60, 16))
+        self.to_label1.setObjectName("to_label1")
+        
+        #### To Field #### 
         self.transfered_to_input1 = QtWidgets.QLineEdit(self.centralwidget)
         self.transfered_to_input1.setGeometry(QtCore.QRect(450, 200, 150, 21))
         self.transfered_to_input1.setText("39620880080")
         self.transfered_to_input1.setObjectName("transfered_to_input1")
 
-        self.amount_transfered_input1
-        self.amount_label1 = QtWidgets.QLabel(self.centralwidget)
-        self.amount_label1.setGeometry(QtCore.QRect(250, 180, 60, 16))
-        self.amount_label1.setObjectName("amount_label1")
-
-        self.to_label1 = QtWidgets.QLabel(self.centralwidget)
-        self.to_label1.setGeometry(QtCore.QRect(450, 180, 60, 16))
-        self.to_label1.setObjectName("to_label1")
-
-
+        #### Add Transaction Button #### 
         self.add_transaction_button1 = QtWidgets.QPushButton(self.centralwidget)
         self.add_transaction_button1.setGeometry(QtCore.QRect(640, 195, 200, 32))
         self.add_transaction_button1.setObjectName("add_transaction_button1")
 
+        #### Text Area Label ####
+        self.current_block_label1 = QtWidgets.QLabel(self.centralwidget)
+        self.current_block_label1.setGeometry(QtCore.QRect(50, 250, 100, 16))
+        self.current_block_label1.setObjectName("current_block_label1")
 
-        #### TEXT AREA #### 
+        #### Text Area #### 
         self.current_block_textarea = QtWidgets.QTextEdit(self.centralwidget)
         self.current_block_textarea.setReadOnly(True)
         self.current_block_textarea.setLineWrapMode(QtWidgets.QTextEdit.NoWrap)
         self.log_font = self.current_block_textarea.font()
         self.log_font.setFamily("Courier")
         self.log_font.setPointSize(10)
-        self.current_block_textarea.setGeometry(QtCore.QRect(50, 250, XSIZE-2*50, YSIZE-350))
+        self.current_block_textarea.setGeometry(QtCore.QRect(50, 280, XSIZE-2*50, YSIZE-350))
         self.current_block_textarea.setText("Empty.")
 
 
@@ -79,17 +115,34 @@ class Ui_add_transactions_window1(object):
         self.retranslateUi(add_transactions_window1)
         QtCore.QMetaObject.connectSlotsByName(add_transactions_window1)
 
-        self.add_transaction_button1.clicked.connect(self.openAddTransactionsWindow)
+        self.add_init_button1.clicked.connect(self.clickedAddInit)
+
+        self.add_transaction_button1.clicked.connect(self.clickedAddTransaction)
+
 
     def retranslateUi(self, add_transactions_window1):
         _translate = QtCore.QCoreApplication.translate
         add_transactions_window1.setWindowTitle(_translate("add_transactions_window1", "Add Transactions"))
+        self.init_dest_label1.setText(_translate("add_transactions_window1", "Init Destination"))
+        self.init_value_label1.setText(_translate("add_transactions_window1", "Init Value"))
+        self.add_init_button1.setText(_translate("add_transactions_window1", "Add Init to Block"))
         self.from_label1.setText(_translate("add_transactions_window1", "From"))
         self.amount_label1.setText(_translate("add_transactions_window1", "Amount"))
         self.to_label1.setText(_translate("add_transactions_window1", "To"))
         self.add_transaction_button1.setText(_translate("add_transactions_window1", "Add Transaction to Block"))
+        self.current_block_label1.setText(_translate("add_transactions_window1", "Current Block:"))
+        
+    def clickedAddInit(self):
+        try:
+            if PushTransactionToNextBlock._check_if_valid_account(self.init_dest_input1.text()):
+                
 
-    def openAddTransactionsWindow(self):
+        except Exception as ex:
+            error_dialog_add_init = QtWidgets.QErrorMessage()
+            error_dialog_add_init.showMessage(str(ex))
+            error_dialog_add_init.exec_()
+
+    def clickedAddTransaction(self):
         try:
             if PushTransactionToNextBlock._check_if_valid_account(self.transfered_from_input1.text()) and \
                 PushTransactionToNextBlock._check_if_valid_account(self.transfered_to_input1.text()):
@@ -101,9 +154,9 @@ class Ui_add_transactions_window1(object):
                 if json.dumps(PushTransactionToNextBlock.CURRENT_BLOCK_TRANSACTIONS) != '':
                     self.current_block_textarea.setText(json.dumps(PushTransactionToNextBlock.CURRENT_BLOCK_TRANSACTIONS, indent=4, sort_keys=True))
         except Exception as ex:
-            error_dialog = QtWidgets.QErrorMessage()
-            error_dialog.showMessage(str(ex))
-            error_dialog.exec_()
+            error_dialog_add_transaction = QtWidgets.QErrorMessage()
+            error_dialog_add_transaction.showMessage(str(ex))
+            error_dialog_add_transaction.exec_()
 
 if __name__ == "__main__":
     import sys
