@@ -106,6 +106,15 @@ class Ui_add_transactions_window1(object):
         self.current_block_textarea.setText("Empty.")
 
 
+        self.cancel_button1 = QtWidgets.QPushButton(self.centralwidget)
+        self.cancel_button1.setGeometry(QtCore.QRect(950, 730, 100, 32))
+        self.cancel_button1.setObjectName("cancel_button1")
+
+        self.push_block_button1 = QtWidgets.QPushButton(self.centralwidget)
+        self.push_block_button1.setGeometry(QtCore.QRect(1050, 730, 100, 32))
+        self.push_block_button1.setObjectName("push_block_button1")
+
+
         add_transactions_window1.setCentralWidget(self.centralwidget)
 
         self.statusbar = QtWidgets.QStatusBar(add_transactions_window1)
@@ -131,11 +140,20 @@ class Ui_add_transactions_window1(object):
         self.to_label1.setText(_translate("add_transactions_window1", "To"))
         self.add_transaction_button1.setText(_translate("add_transactions_window1", "Add Transaction to Block"))
         self.current_block_label1.setText(_translate("add_transactions_window1", "Current Block:"))
+        self.push_block_button1.setText(_translate("push_block_button1", "Push Block"))
+        self.cancel_button1.setText(_translate("cancel_button1", "Cancel"))
         
     def clickedAddInit(self):
         try:
             if PushTransactionToNextBlock._check_if_valid_account(self.init_dest_input1.text()):
-                
+                # INSERIR CONTROLE PARA SE JÁ TIVER SIDO SETADO UM INIT DESABILITAR CAMPO
+                PushTransactionToNextBlock.CURRENT_BLOCK_INIT_DESTINATION = self.init_dest_input1.text()
+                PushTransactionToNextBlock.CURRENT_BLOCK_INIT_VALUE = float(self.init_value_input1.text())
+                self.init_dest_input1.setDisabled(True)
+                self.init_value_input1.setDisabled(True)
+                self.add_init_button1.setDisabled(True)
+                add_transactions_window1.repaint()
+
 
         except Exception as ex:
             error_dialog_add_init = QtWidgets.QErrorMessage()
@@ -153,6 +171,7 @@ class Ui_add_transactions_window1(object):
         
                 if json.dumps(PushTransactionToNextBlock.CURRENT_BLOCK_TRANSACTIONS) != '':
                     self.current_block_textarea.setText(json.dumps(PushTransactionToNextBlock.CURRENT_BLOCK_TRANSACTIONS, indent=4, sort_keys=True))
+                    add_transactions_window1.repaint()
         except Exception as ex:
             error_dialog_add_transaction = QtWidgets.QErrorMessage()
             error_dialog_add_transaction.showMessage(str(ex))
