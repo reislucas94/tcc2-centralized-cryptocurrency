@@ -146,12 +146,14 @@ class Ui_add_transactions_window1(object):
     def clickedAddInit(self):
         try:
             if PushTransactionToNextBlock._check_if_valid_account(self.init_dest_input1.text()):
-                # INSERIR CONTROLE PARA SE JÁ TIVER SIDO SETADO UM INIT DESABILITAR CAMPO
+
                 PushTransactionToNextBlock.CURRENT_BLOCK_INIT_DESTINATION = self.init_dest_input1.text()
                 PushTransactionToNextBlock.CURRENT_BLOCK_INIT_VALUE = float(self.init_value_input1.text())
+
                 self.init_dest_input1.setDisabled(True)
                 self.init_value_input1.setDisabled(True)
                 self.add_init_button1.setDisabled(True)
+
                 add_transactions_window1.repaint()
 
 
