@@ -6,12 +6,15 @@ from Central.Entities.Transaction import Transaction
 import sys
 sys.path.append("..")
 from User.Entities.Account import AccountList as AccountList
+from Central.Entities.Block import Block as Block
+import time
+from Central.MiningCore import mine_block
 
 CURRENT_BLOCK_TRANSACTIONS = {}
 CURRENT_BLOCK_INIT_DESTINATION = '39620880080'
 CURRENT_BLOCK_INIT_VALUE = 0.0
 
-def push(tx: str, sender_idn: str, receiver_idn: str, amount: float, sender_signature: str ):
+def push_transaction(tx: str, sender_idn: str, receiver_idn: str, amount: float, sender_signature: str ):
     global CURRENT_BLOCK_TRANSACTIONS
     
     if __check_signature_authenticity(sender_idn, sender_signature) and \
@@ -67,3 +70,62 @@ def __check_if_has_balance(sender_idn: str, amount_transfered: float):
         return True
     else: 
         raise Exception("Sender '{}' does not have balance for this transaction.".format(sender_idn))
+
+def push_block():
+    global CURRENT_BLOCK_INIT_DESTINATION
+    global CURRENT_BLOCK_INIT_VALUE
+    global CURRENT_BLOCK_TRANSACTIONS
+    #Preenche timestamp
+    #Preenche previous_block_hash
+    #Preenche init_destination
+    #Preenche init_value
+    #Preenche tx_dataset
+    #Preenche block_hash
+    #Detects which block was the last generated one
+    last_block_number = get_last_block_number()
+    last_block_directory = 'Central/Databases/Blocks/block{}.json'.format(last_block_number)
+    next_block_directory = 'Central/Databases/Blocks/block{}.json'.format(last_block_number+1)
+    file_out = open(last_block_directory, 'r')
+    last_block_data = file_out.read()
+    file_out.close()
+    #Gets data from file and puts into lastBlockDataObj
+    last_block_data_object = json.loads(last_block_data)
+    last_block_data_object = Block(last_block_data_object['timestamp'],
+        last_block_data_object['previous_block_hash'],
+        last_block_data_object['init_value'],
+        last_block_data_object['init_destination'],
+        last_block_data_object['tx_dataset'],
+        last_block_data_object['block_nonce'],
+        last_block_data_object['block_hash'],)
+ #----------------------------------------------------
+    
+    try:
+        new_block_timestamp = float(time.time())
+        new_block_previous_hash = last_block_data_object.block_hash
+        new_block_init_value = CURRENT_BLOCK_INIT_VALUE
+        new_block_init_destination = CURRENT_BLOCK_INIT_DESTINATION
+        new_block_tx_dataset = CURRENT_BLOCK_TRANSACTIONS
+        new_block_nonce = 0
+
+        try:
+            new_block_hash = mine_block(new_block_timestamp, 
+                new_block_previous_hash, 
+                new_block_init_value, 
+                new_block_init_destination, 
+                new_block_tx_dataset, 
+                new_block_nonce)
+        except:
+            raise
+    except:
+        raise
+        
+
+    new_block_data_object = Block(new_block_timestamp, 
+    new_block_previous_hash, 
+    new_block_init_value, 
+    new_block_init_destination, 
+    new_block_tx_dataset, 
+    new_block_nonce,
+    new_block_hash)
+    print (new_block_data_object)
+ 

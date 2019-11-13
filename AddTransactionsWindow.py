@@ -18,10 +18,13 @@ import json
 XSIZE = 1200
 YSIZE = 800
 
+
+
 class Ui_add_transactions_window1(object):
     def setupUi(self, add_transactions_window1):
         add_transactions_window1.setObjectName("add_transactions_window1")
         add_transactions_window1.resize(XSIZE, YSIZE)
+        self.init_has_been_added = False
         self.centralwidget = QtWidgets.QWidget(add_transactions_window1)
         self.centralwidget.setObjectName("centralwidget")
 
@@ -128,6 +131,9 @@ class Ui_add_transactions_window1(object):
 
         self.add_transaction_button1.clicked.connect(self.clickedAddTransaction)
 
+        self.push_block_button1.clicked.connect(self.clickedPushBlock)
+
+        self.cancel_button1.clicked.connect(self.clickedCancel)
 
     def retranslateUi(self, add_transactions_window1):
         _translate = QtCore.QCoreApplication.translate
@@ -145,7 +151,8 @@ class Ui_add_transactions_window1(object):
         
     def clickedAddInit(self):
         try:
-            if PushTransactionToNextBlock._check_if_valid_account(self.init_dest_input1.text()):
+            if PushTransactionToNextBlock._check_if_valid_account(self.init_dest_input1.text()) and \
+                float(self.init_value_input1.text()) > 0:
 
                 PushTransactionToNextBlock.CURRENT_BLOCK_INIT_DESTINATION = self.init_dest_input1.text()
                 PushTransactionToNextBlock.CURRENT_BLOCK_INIT_VALUE = float(self.init_value_input1.text())
@@ -153,6 +160,8 @@ class Ui_add_transactions_window1(object):
                 self.init_dest_input1.setDisabled(True)
                 self.init_value_input1.setDisabled(True)
                 self.add_init_button1.setDisabled(True)
+
+                self.init_has_been_added = True
 
                 add_transactions_window1.repaint()
 
@@ -169,7 +178,7 @@ class Ui_add_transactions_window1(object):
 
                 tx = form_transaction(time.time(), self.transfered_from_input1.text(), float(self.amount_transfered_input1.text()), self.transfered_to_input1.text())
 
-                PushTransactionToNextBlock.push(tx, Transaction(tx).get_sender_idn(), Transaction(tx).get_receiver_idn(), Transaction(tx).get_amount_transfered(), sign_transaction(tx))
+                PushTransactionToNextBlock.push_transaction(tx, Transaction(tx).get_sender_idn(), Transaction(tx).get_receiver_idn(), Transaction(tx).get_amount_transfered(), sign_transaction(tx))
         
                 if json.dumps(PushTransactionToNextBlock.CURRENT_BLOCK_TRANSACTIONS) != '':
                     self.current_block_textarea.setText(json.dumps(PushTransactionToNextBlock.CURRENT_BLOCK_TRANSACTIONS, indent=4, sort_keys=True))
@@ -178,6 +187,25 @@ class Ui_add_transactions_window1(object):
             error_dialog_add_transaction = QtWidgets.QErrorMessage()
             error_dialog_add_transaction.showMessage(str(ex))
             error_dialog_add_transaction.exec_()
+
+    def clickedPushBlock(self):
+        try:
+            if len(PushTransactionToNextBlock.CURRENT_BLOCK_TRANSACTIONS) > 0 and \
+                self.init_has_been_added:
+                
+                PushTransactionToNextBlock.push_block()
+                
+                add_transactions_window1.repaint()
+
+                print(self.init_has_been_added)
+
+        except Exception as ex:
+            error_dialog_add_transaction = QtWidgets.QErrorMessage()
+            error_dialog_add_transaction.showMessage(str(ex))
+            error_dialog_add_transaction.exec_()
+
+    def clickedCancel(self):
+        self.close()
 
 if __name__ == "__main__":
     import sys
