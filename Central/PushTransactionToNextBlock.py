@@ -98,7 +98,6 @@ def push_block():
         last_block_data_object['block_nonce'],
         last_block_data_object['block_hash'],)
  #----------------------------------------------------
-    
     try:
         new_block_timestamp = float(time.time())
         new_block_previous_hash = last_block_data_object.block_hash
