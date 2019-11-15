@@ -32,9 +32,8 @@ def check_signature(tx: str, signature):
     hash_message = SHA256.new(tx.encode('utf-8'))
     try:
         pkcs1_15.new(public_key).verify(hash_message, signature)
-        print ('The signature is valid.')
     except (ValueError, TypeError):
-        print ('The signature is not valid.')    
+        raise
     return True
 
 def get_block_init():
@@ -60,3 +59,11 @@ def get_last_block_number():
             block_number = filename.replace('block','').replace('.json','')
             if int(block_number) >= last_block_number : last_block_number = int(block_number)
     return last_block_number
+
+#Transforms transactions dictionary to array of strings
+def stringify_transactions(tx_dataset):
+    transactions = []
+    for i in range(len(tx_dataset)):
+        tx_str = list(tx_dataset)[i] + ":" + tx_dataset[list(tx_dataset)[i]]
+        transactions.append(tx_str)
+    return transactions

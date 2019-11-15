@@ -1,6 +1,7 @@
 import json
 from py_linq import Enumerable
 from .CentralCore import get_last_block_number
+from .CentralCore import stringify_transactions
 from py_linq import Enumerable
 from Central.Entities.Transaction import Transaction
 import sys
@@ -75,20 +76,14 @@ def push_block():
     global CURRENT_BLOCK_INIT_DESTINATION
     global CURRENT_BLOCK_INIT_VALUE
     global CURRENT_BLOCK_TRANSACTIONS
-    #Preenche timestamp
-    #Preenche previous_block_hash
-    #Preenche init_destination
-    #Preenche init_value
-    #Preenche tx_dataset
-    #Preenche block_hash
-    #Detects which block was the last generated one
+
     last_block_number = get_last_block_number()
     last_block_directory = 'Central/Databases/Blocks/block{}.json'.format(last_block_number)
     next_block_directory = 'Central/Databases/Blocks/block{}.json'.format(last_block_number+1)
     file_out = open(last_block_directory, 'r')
     last_block_data = file_out.read()
     file_out.close()
-    #Gets data from file and puts into lastBlockDataObj
+
     last_block_data_object = json.loads(last_block_data)
     last_block_data_object = Block(last_block_data_object['timestamp'],
         last_block_data_object['previous_block_hash'],
@@ -107,7 +102,7 @@ def push_block():
         new_block_nonce = 0
 
         try:
-            new_block_hash = mine_block(new_block_timestamp, 
+            new_block_hash_and_nonce = mine_block(new_block_timestamp, 
                 new_block_previous_hash, 
                 new_block_init_value, 
                 new_block_init_destination, 
@@ -117,7 +112,9 @@ def push_block():
             raise
     except:
         raise
-        
+
+    new_block_hash = new_block_hash_and_nonce[0]  
+    new_block_nonce = new_block_hash_and_nonce[1]
 
     new_block_data_object = Block(new_block_timestamp, 
     new_block_previous_hash, 
@@ -126,5 +123,28 @@ def push_block():
     new_block_tx_dataset, 
     new_block_nonce,
     new_block_hash)
-    print (new_block_data_object)
+
+    # new_block_obj = []
+    # new_block_obj["timestamp"] = new_block_data_object.timestamp
+    # new_block_obj["previous_block_hash"] = new_block_data_object.previous_block_hash
+    # new_block_obj["init_value"] = new_block_data_object.init_value
+    # new_block_obj["init_destination"] = new_block_data_object.init_destination
+    # new_block_obj["tx_dataset"] = new_block_data_object.tx_dataset
+    # new_block_obj["block_nonce"] = new_block_data_object.block_nonce
+    # new_block_obj["block_hash"] = new_block_data_object.block_hash
+    
+    new_block_json_data = json.dumps(
+        {"timestamp":new_block_data_object.timestamp, 
+        "previous_block_hash":new_block_data_object.previous_block_hash,
+        "init_value":new_block_data_object.init_value,
+        "init_destination":new_block_data_object.init_destination,
+        "tx_dataset": stringify_transactions(new_block_data_object.tx_dataset),
+        "block_nonce": new_block_data_object.block_nonce,
+        "block_hash":new_block_data_object.block_hash
+        }
+        , indent=4)
+
+    with open(next_block_directory, "w") as new_block_file:
+        new_block_file.write(new_block_json_data)
+        new_block_file.close()
  

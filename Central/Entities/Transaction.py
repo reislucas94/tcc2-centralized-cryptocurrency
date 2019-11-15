@@ -26,4 +26,4 @@ class Transaction:
         return float(self.tx_string.split(";")[2])
 
     def get_receiver_idn (self):
-        return self.tx_string.split(";")[3]
+        return self.tx_string.split(";")[3].split(":")[0]

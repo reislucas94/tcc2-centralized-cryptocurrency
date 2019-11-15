@@ -2,6 +2,7 @@ from Crypto.PublicKey import RSA #https://pycryptodome.readthedocs.io/en/latest/
 from Crypto.Hash import SHA256
 from Central.Merkle import Merkle as Merkle
 import time
+from Central.CentralCore import stringify_transactions
 
 def mine_block(timestamp: float, previous_block_hash: str, init_value:float, init_destination:str, tx_dataset, block_nonce:int):
     init_time = time.time()
@@ -27,14 +28,13 @@ def mine_block(timestamp: float, previous_block_hash: str, init_value:float, ini
     final_time = time.time()
 
     total_time = final_time - init_time
-
-    print(block_nonce)
+    
+    return [block_hash,block_nonce]
 
 def _get_txdataset_hash(tx_dataset):
     transactions = []
-    for i in range(len(tx_dataset)):
-        tx_str = list(tx_dataset)[i] + ":" + tx_dataset[list(tx_dataset)[i]]
-        transactions.append(tx_str)
+
+    transactions = stringify_transactions(tx_dataset)
 
     merkle_tree = Merkle()
     merkle_tree.listoftransaction = transactions
