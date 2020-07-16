@@ -20,7 +20,7 @@ def mine_block(timestamp: float, previous_block_hash: str, init_value:float, ini
     block_hash = SHA256.new(bytearray(hash_init+hash_tx_dataset+hash_block_nonce, 'ascii')).hexdigest()
 
     #While block_hash does not start with '000'...
-    while (block_hash[0] != '0') or (block_hash[1] != '0') or (block_hash[2] != '0') or (block_hash[3] != '0'):
+    while (block_hash[0] != '0') or (block_hash[1] != '0') or (block_hash[2] != '0'): #or (block_hash[3] != '0') or (block_hash[4] != '0'):
         block_nonce+=1
         hash_block_nonce = SHA256.new(bytearray(str(block_nonce), 'ascii')).hexdigest()
         block_hash = SHA256.new(bytearray(hash_init+hash_tx_dataset+hash_block_nonce, 'ascii')).hexdigest()
