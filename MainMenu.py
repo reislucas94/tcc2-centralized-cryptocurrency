@@ -61,6 +61,7 @@ class Ui_MainWindow(object):
 
         self.addTransactionsButton.clicked.connect(self.openAddTransactionsWindow)
         self.checkBlockchainConsistencyButton.clicked.connect(self.checkBlockchainConsistency)
+        self.showBlocksButton.clicked.connect(self.showBlocks)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -88,6 +89,11 @@ class Ui_MainWindow(object):
             error_dialog_check_consistency.showMessage(str(ex))
             error_dialog_check_consistency.exec_()
 
+    def showBlocks(self):
+        import os
+        import subprocess
+        path = "./Central/Databases/Blocks"
+        os.system('open "%s"' % path)
 
 if __name__ == "__main__":
     import sys
