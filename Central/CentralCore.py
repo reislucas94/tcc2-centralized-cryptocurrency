@@ -1,10 +1,14 @@
 import os
+import json
+import time
 from Crypto.PublicKey import RSA #https://pycryptodome.readthedocs.io/en/latest/src/examples.html#generate-public-key-and-private-key
 from .Entities.Transaction import Transaction as Transaction
 from .Dto.AccountsDto import AccountsDto as AccountsDto
 from Crypto.Cipher import PKCS1_OAEP
 from Crypto.Signature import pkcs1_15
 from Crypto.Hash import SHA256
+from Central.Merkle import Merkle as Merkle
+from Central.Entities.Block import Block as Block
 
 def generate_private_key(key):
     private_key = key.export_key()
@@ -35,6 +39,65 @@ def check_signature(tx: str, signature):
     except (ValueError, TypeError):
         raise
     return True
+
+def check_blockchain_consistency():
+    last_block_number = get_last_block_number()
+    for i in range(last_block_number+1):
+        if i != 0:
+            try:
+                with open('Central/Databases/Blocks/block{}.json'.format(i)) as block_file:
+                    block_json = json.load(block_file)
+                    block_object = Block(block_json['timestamp'],
+                                    block_json['previous_block_hash'],
+                                    block_json['init_value'],
+                                    block_json['init_destination'],
+                                    block_json['tx_dataset'],
+                                    block_json['block_nonce'],
+                                    block_json['block_hash'])
+                    hash_result = find_block_hash(block_object.timestamp, 
+                                    block_object.previous_block_hash,
+                                    block_object.init_value,
+                                    block_object.init_destination,
+                                    block_object.tx_dataset,
+                                    block_object.block_nonce)
+                    if hash_result == block_object.block_hash:
+                        print('Block{} is valid.'.format(i))
+                    else:
+                        raise Exception("The hash of 'block{}' is wrong. The block might have been changed and is invalid.".format(i))
+            except:
+                raise
+    
+
+def find_block_hash(timestamp: float, previous_block_hash: str, init_value:float, init_destination:str, tx_dataset, block_nonce:int):
+    init_time = time.time()
+
+    hash_timestamp = SHA256.new(bytearray(str(timestamp), 'ascii')).hexdigest()
+
+    hash_init_value = SHA256.new(bytearray(str(init_value), 'ascii')).hexdigest()
+    hash_init_destination = SHA256.new(bytearray(init_destination, 'ascii')).hexdigest()
+    hash_init = SHA256.new(bytearray(hash_init_value+hash_init_destination, 'ascii')).hexdigest()
+
+    hash_tx_dataset = _get_txdataset_hash(tx_dataset)
+
+    hash_block_nonce = SHA256.new(bytearray(str(block_nonce), 'ascii')).hexdigest()
+
+    block_hash = SHA256.new(bytearray(hash_init+hash_tx_dataset+hash_block_nonce, 'ascii')).hexdigest()
+    
+    return block_hash
+
+def _get_txdataset_hash(tx_dataset):
+    transactions = []
+
+    if isinstance(tx_dataset, dict):
+        transactions = stringify_transactions(tx_dataset)
+    else:
+        transactions = tx_dataset
+
+    merkle_tree = Merkle()
+    merkle_tree.listoftransaction = transactions
+    merkle_tree.create_tree()
+
+    return merkle_tree.Get_Root_leaf()
 
 def get_block_init():
     return 500

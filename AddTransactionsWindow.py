@@ -200,9 +200,9 @@ class Ui_add_transactions_window1(object):
                 print(self.init_has_been_added)
 
         except Exception as ex:
-            error_dialog_add_transaction = QtWidgets.QErrorMessage()
-            error_dialog_add_transaction.showMessage(str(ex))
-            error_dialog_add_transaction.exec_()
+            error_dialog_clicked_push = QtWidgets.QErrorMessage()
+            error_dialog_clicked_push.showMessage(str(ex))
+            error_dialog_clicked_push.exec_()
 
     def clickedCancel(self):
         self.close()

@@ -9,6 +9,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from AddTransactionsWindow import Ui_add_transactions_window1 as AddTransactionsWindow
+from Central.CentralCore import check_blockchain_consistency as check_blockchain_consistency_central_core
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -32,10 +33,16 @@ class Ui_MainWindow(object):
         self.label.setFont(font)
         self.label.setObjectName("label")
 
+        #Show blocks button
+        self.showBlocksButton = QtWidgets.QPushButton(self.centralwidget)
+        self.showBlocksButton.setGeometry(QtCore.QRect(330, 360, 141, 32))
+        self.showBlocksButton.setObjectName("showBlocksButton")
+        MainWindow.setCentralWidget(self.centralwidget)
 
-        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(330, 360, 141, 32))
-        self.pushButton.setObjectName("pushButton")
+        #Check blockchain consistency button
+        self.checkBlockchainConsistencyButton = QtWidgets.QPushButton(self.centralwidget)
+        self.checkBlockchainConsistencyButton.setGeometry(QtCore.QRect(290, 440, 220, 32))
+        self.checkBlockchainConsistencyButton.setObjectName("checkBlockchainConsistencyButton")
         MainWindow.setCentralWidget(self.centralwidget)
 
 
@@ -53,13 +60,15 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         self.addTransactionsButton.clicked.connect(self.openAddTransactionsWindow)
+        self.checkBlockchainConsistencyButton.clicked.connect(self.checkBlockchainConsistency)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.addTransactionsButton.setText(_translate("MainWindow", "Add Transactions"))
         self.label.setText(_translate("MainWindow", "Centralized Blockchain"))
-        self.pushButton.setText(_translate("MainWindow", "Show All Blocks"))
+        self.showBlocksButton.setText(_translate("MainWindow", "Show All Blocks"))
+        self.checkBlockchainConsistencyButton.setText(_translate("MainWindow", "Check Blockchain Consistency"))
 
     def openAddTransactionsWindow(self):
         print ("Opening AddTransactionsWindow ...")
@@ -67,6 +76,18 @@ class Ui_MainWindow(object):
         self.ui = AddTransactionsWindow()
         self.ui.setupUi(self.window)
         self.window.show()
+
+    def checkBlockchainConsistency(self): 
+        try:
+            check_blockchain_consistency_central_core()
+            success_dialog_check_consistency = QtWidgets.QMessageBox()
+            success_dialog_check_consistency.setText('All blocks have been checked and they are all valid.')
+            success_dialog_check_consistency.exec_()
+        except Exception as ex:
+            error_dialog_check_consistency = QtWidgets.QErrorMessage()
+            error_dialog_check_consistency.showMessage(str(ex))
+            error_dialog_check_consistency.exec_()
+
 
 if __name__ == "__main__":
     import sys
