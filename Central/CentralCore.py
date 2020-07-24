@@ -160,5 +160,4 @@ def _check_account_balance(idn: str):
                 current_balance-=Transaction(tx).get_amount_transfered()
             if Transaction(tx).get_receiver_idn() == idn:
                 current_balance+=Transaction(tx).get_amount_transfered()
-    print (current_balance)
     return current_balance
