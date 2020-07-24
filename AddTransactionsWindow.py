@@ -11,6 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import Central.PushTransactionToNextBlock as PushTransactionToNextBlock
 from Central.CentralCore import form_transaction as form_transaction
 from Central.CentralCore import sign_transaction as sign_transaction
+
 import time
 from Central.Entities.Transaction import Transaction as Transaction
 import json
@@ -127,6 +128,8 @@ class Ui_add_transactions_window1(object):
         self.retranslateUi(add_transactions_window1)
         QtCore.QMetaObject.connectSlotsByName(add_transactions_window1)
 
+        self.add_transactions_window1 = add_transactions_window1
+
         self.add_init_button1.clicked.connect(self.clickedAddInit)
 
         self.add_transaction_button1.clicked.connect(self.clickedAddTransaction)
@@ -163,7 +166,7 @@ class Ui_add_transactions_window1(object):
 
                 self.init_has_been_added = True
 
-                add_transactions_window1.repaint()
+                self.add_transactions_window1.repaint()
 
 
         except Exception as ex:
@@ -182,7 +185,7 @@ class Ui_add_transactions_window1(object):
         
                 if json.dumps(PushTransactionToNextBlock.CURRENT_BLOCK_TRANSACTIONS) != '':
                     self.current_block_textarea.setText(json.dumps(PushTransactionToNextBlock.CURRENT_BLOCK_TRANSACTIONS, indent=4, sort_keys=True))
-                    add_transactions_window1.repaint()
+                    self.add_transactions_window1.repaint()
         except Exception as ex:
             error_dialog_add_transaction = QtWidgets.QErrorMessage()
             error_dialog_add_transaction.showMessage(str(ex))
@@ -195,9 +198,13 @@ class Ui_add_transactions_window1(object):
                 
                 PushTransactionToNextBlock.push_block()
                 
-                add_transactions_window1.repaint()
+                self.add_transactions_window1.repaint()
 
-                print(self.init_has_been_added)
+                success_dialog_pushed_block = QtWidgets.QMessageBox()
+                success_dialog_pushed_block.setText('The block has been successfully pushed to the Blockchain.')
+                success_dialog_pushed_block.exec_()
+
+                self.add_transactions_window1.close()
 
         except Exception as ex:
             error_dialog_clicked_push = QtWidgets.QErrorMessage()
@@ -205,7 +212,7 @@ class Ui_add_transactions_window1(object):
             error_dialog_clicked_push.exec_()
 
     def clickedCancel(self):
-        self.close()
+        self.add_transactions_window1.close()
 
 if __name__ == "__main__":
     import sys

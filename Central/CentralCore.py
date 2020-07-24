@@ -130,3 +130,35 @@ def stringify_transactions(tx_dataset):
         tx_str = list(tx_dataset)[i] + ":" + tx_dataset[list(tx_dataset)[i]]
         transactions.append(tx_str)
     return transactions
+
+def check_all_balances():
+    try:
+        balances_dict = dict()
+        with open('./User/Databases/accounts.json') as accounts_file:
+            accounts_json = json.load(accounts_file)
+            for idx, account in enumerate(accounts_json['account_list']):
+                balances_dict[account['idn']] = _check_account_balance(account['idn'])
+        balances_json = json.dumps(balances_dict, indent=4, sort_keys=True)
+        # with open("balances_file.json", "w") as balances_file:
+        #     balances_file.write(balances_json)
+        #     balances_file.close()
+    except:
+        raise
+
+def _check_account_balance(idn: str):
+    last_block_number = get_last_block_number()
+    current_balance=0
+    for i in range(last_block_number+1):
+        block_file = open('Central/Databases/Blocks/block{}.json'.format(i), 'r')
+        block_file_data = block_file.read()
+        block_file.close()
+        block_data_object = json.loads(block_file_data)
+        if block_data_object['init_destination'] == idn: 
+            current_balance+=block_data_object['init_value']
+        for tx in block_data_object['tx_dataset']:
+            if Transaction(tx).get_sender_idn() == idn:
+                current_balance-=Transaction(tx).get_amount_transfered()
+            if Transaction(tx).get_receiver_idn() == idn:
+                current_balance+=Transaction(tx).get_amount_transfered()
+    print (current_balance)
+    return current_balance

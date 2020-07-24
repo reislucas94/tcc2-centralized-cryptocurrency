@@ -6,3 +6,4 @@ Central/.DS_Store
 .DS_Store
 __pycache__/
 Jae_MerkTree.py
+.vscode/settings.json

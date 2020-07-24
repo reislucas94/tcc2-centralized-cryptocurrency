@@ -10,6 +10,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from AddTransactionsWindow import Ui_add_transactions_window1 as AddTransactionsWindow
 from Central.CentralCore import check_blockchain_consistency as check_blockchain_consistency_central_core
+from Central.CentralCore import check_all_balances as check_all_balances
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -20,14 +21,10 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
-        #Add Transaction Button
-        self.addTransactionsButton = QtWidgets.QPushButton(self.centralwidget)
-        self.addTransactionsButton.setGeometry(QtCore.QRect(320, 400, 161, 32))
-        self.addTransactionsButton.setObjectName("addTransactionsButton")
 
-
+        #Label centralized blockchain
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(310, 110, 341, 91))
+        self.label.setGeometry(QtCore.QRect(280, 110, 350, 90))
         font = QtGui.QFont()
         font.setPointSize(18)
         self.label.setFont(font)
@@ -35,33 +32,40 @@ class Ui_MainWindow(object):
 
         #Show blocks button
         self.showBlocksButton = QtWidgets.QPushButton(self.centralwidget)
-        self.showBlocksButton.setGeometry(QtCore.QRect(330, 360, 141, 32))
+        self.showBlocksButton.setGeometry(QtCore.QRect(300, 360, 200, 32))
         self.showBlocksButton.setObjectName("showBlocksButton")
-        MainWindow.setCentralWidget(self.centralwidget)
+
+        #Add Transaction Button
+        self.addTransactionsButton = QtWidgets.QPushButton(self.centralwidget)
+        self.addTransactionsButton.setGeometry(QtCore.QRect(300, 400, 200, 32))
+        self.addTransactionsButton.setObjectName("addTransactionsButton")
 
         #Check blockchain consistency button
         self.checkBlockchainConsistencyButton = QtWidgets.QPushButton(self.centralwidget)
-        self.checkBlockchainConsistencyButton.setGeometry(QtCore.QRect(290, 440, 220, 32))
+        self.checkBlockchainConsistencyButton.setGeometry(QtCore.QRect(300, 440, 200, 32))
         self.checkBlockchainConsistencyButton.setObjectName("checkBlockchainConsistencyButton")
+
+
+        #Check all account balances
+        self.showAllBalancesButton = QtWidgets.QPushButton(self.centralwidget)
+        self.showAllBalancesButton.setGeometry(QtCore.QRect(300, 480, 200, 32))
+        self.showAllBalancesButton.setObjectName("showAllBalancesButton")
+        
         MainWindow.setCentralWidget(self.centralwidget)
 
+        #StatusBar
+        self.statusBar = QtWidgets.QStatusBar(MainWindow)
+        self.statusBar.setObjectName("statusBar")
+        MainWindow.setStatusBar(self.statusBar)
 
-        self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 22))
-        self.menubar.setObjectName("menubar")
-        MainWindow.setMenuBar(self.menubar)
-
-        
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
-
+        #Set names to buttons/labels
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         self.addTransactionsButton.clicked.connect(self.openAddTransactionsWindow)
         self.checkBlockchainConsistencyButton.clicked.connect(self.checkBlockchainConsistency)
         self.showBlocksButton.clicked.connect(self.showBlocks)
+        self.showAllBalancesButton.clicked.connect(self.showAccountBalance)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -70,6 +74,7 @@ class Ui_MainWindow(object):
         self.label.setText(_translate("MainWindow", "Centralized Blockchain"))
         self.showBlocksButton.setText(_translate("MainWindow", "Show All Blocks"))
         self.checkBlockchainConsistencyButton.setText(_translate("MainWindow", "Check Blockchain Consistency"))
+        self.showAllBalancesButton.setText(_translate("MainWindow", "Show All Balances"))
 
     def openAddTransactionsWindow(self):
         print ("Opening AddTransactionsWindow ...")
@@ -91,9 +96,22 @@ class Ui_MainWindow(object):
 
     def showBlocks(self):
         import os
-        import subprocess
-        path = "./Central/Databases/Blocks"
-        os.system('open "%s"' % path)
+        if os.name == 'nt':
+            import subprocess
+            import pathlib
+            basepath = pathlib.Path().absolute()
+            subprocess.Popen('explorer "%s"' % str(basepath)+'\\Central\\Databases\\Blocks')
+        else:
+            path = "./Central/Databases/Blocks"
+            os.system('open "%s"' % path)
+
+    def showAccountBalance(self):
+        try:
+            check_all_balances()
+        except Exception as ex:
+            error_dialog_show_account_balance = QtWidgets.QErrorMessage()
+            error_dialog_show_account_balance.showMessage(str(ex))
+            error_dialog_show_account_balance.exec_()
 
 if __name__ == "__main__":
     import sys
