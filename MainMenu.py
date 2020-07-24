@@ -107,7 +107,13 @@ class Ui_MainWindow(object):
 
     def showAccountBalance(self):
         try:
-            check_all_balances()
+            balances_json = check_all_balances()
+            account_balances_message_box = QtWidgets.QMessageBox()
+            account_balances_message_box.setWindowTitle("Success!")
+            account_balances_message_box.setText("All account balances have been calculated successfuly.")
+            account_balances_message_box.setInformativeText("Click 'Show Details' for more information.")
+            account_balances_message_box.setDetailedText(balances_json)
+            account_balances_message_box.exec_()
         except Exception as ex:
             error_dialog_show_account_balance = QtWidgets.QErrorMessage()
             error_dialog_show_account_balance.showMessage(str(ex))

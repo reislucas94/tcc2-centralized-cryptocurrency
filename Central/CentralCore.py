@@ -139,9 +139,8 @@ def check_all_balances():
             for idx, account in enumerate(accounts_json['account_list']):
                 balances_dict[account['idn']] = _check_account_balance(account['idn'])
         balances_json = json.dumps(balances_dict, indent=4, sort_keys=True)
-        # with open("balances_file.json", "w") as balances_file:
-        #     balances_file.write(balances_json)
-        #     balances_file.close()
+        return balances_json
+        
     except:
         raise
 
