@@ -99,21 +99,6 @@ def _get_txdataset_hash(tx_dataset):
 
     return merkle_tree.Get_Root_leaf()
 
-def get_block_init():
-    return 500
-
-def get_init_destination():
-    return "17040189003"
-
-def get_all_transfers(input):
-    return input
-
-def put_into_block(input):
-    return input
-
-def publish_block(input):
-    return input
-
 def get_last_block_number():
     #Detects last block number
     last_block_number = 0 

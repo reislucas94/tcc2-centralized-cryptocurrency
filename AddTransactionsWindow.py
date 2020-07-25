@@ -204,6 +204,10 @@ class Ui_add_transactions_window1(object):
                 success_dialog_pushed_block.setText('The block has been successfully pushed to the Blockchain.')
                 success_dialog_pushed_block.exec_()
 
+                PushTransactionToNextBlock.CURRENT_BLOCK_INIT_DESTINATION = ''
+                PushTransactionToNextBlock.CURRENT_BLOCK_INIT_VALUE = 0
+                PushTransactionToNextBlock.CURRENT_BLOCK_TRANSACTIONS = {}
+
                 self.add_transactions_window1.close()
 
         except Exception as ex:
