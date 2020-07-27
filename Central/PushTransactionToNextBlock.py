@@ -36,7 +36,13 @@ def _check_if_valid_account(idn:str):
             return True
         else: 
             raise Exception("Account '{}' does not exist.".format(idn))
-    
+
+def _check_if_accounts_are_different(idn_sender: str, idn_receiver:str):
+    if (idn_sender != idn_receiver):
+        return True
+    else:
+        raise Exception("The sender and receiver accounts are the same.")
+
 def __check_signature_authenticity(sender_idn: str, sender_signature: str):
     return True
 

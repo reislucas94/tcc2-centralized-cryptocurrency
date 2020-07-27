@@ -177,7 +177,8 @@ class Ui_add_transactions_window1(object):
     def clickedAddTransaction(self):
         try:
             if PushTransactionToNextBlock._check_if_valid_account(self.transfered_from_input1.text()) and \
-                PushTransactionToNextBlock._check_if_valid_account(self.transfered_to_input1.text()):
+                PushTransactionToNextBlock._check_if_valid_account(self.transfered_to_input1.text()) and \
+                    PushTransactionToNextBlock._check_if_accounts_are_different(self.transfered_from_input1.text(), self.transfered_to_input1.text()):
 
                 tx = form_transaction(time.time(), self.transfered_from_input1.text(), float(self.amount_transfered_input1.text()), self.transfered_to_input1.text())
 
