@@ -10,6 +10,7 @@ from User.Entities.Account import AccountList as AccountList
 from Central.Entities.Block import Block as Block
 import time
 from Central.MiningCore import mine_block
+from .CentralCore import check_signature as check_signature
 
 CURRENT_BLOCK_TRANSACTIONS = {}
 CURRENT_BLOCK_INIT_DESTINATION = '39620880080'
@@ -18,7 +19,7 @@ CURRENT_BLOCK_INIT_VALUE = 0.0
 def push_transaction(tx: str, sender_idn: str, receiver_idn: str, amount: float, sender_signature: str ):
     global CURRENT_BLOCK_TRANSACTIONS
     
-    if __check_signature_authenticity(sender_idn, sender_signature) and \
+    if __check_signature_authenticity(tx, sender_signature) and \
         __check_if_has_balance(sender_idn, amount):
         
         CURRENT_BLOCK_TRANSACTIONS[tx] = sender_signature.hex()
@@ -43,8 +44,8 @@ def _check_if_accounts_are_different(idn_sender: str, idn_receiver:str):
     else:
         raise Exception("The sender and receiver accounts are the same.")
 
-def __check_signature_authenticity(sender_idn: str, sender_signature: str):
-    return True
+def __check_signature_authenticity(tx: str, sender_signature: str):
+    return check_signature(tx, sender_signature)
 
 def __check_if_has_balance(sender_idn: str, amount_transfered: float):
     last_block_number = get_last_block_number()
@@ -129,15 +130,6 @@ def push_block():
     new_block_tx_dataset, 
     new_block_nonce,
     new_block_hash)
-
-    # new_block_obj = []
-    # new_block_obj["timestamp"] = new_block_data_object.timestamp
-    # new_block_obj["previous_block_hash"] = new_block_data_object.previous_block_hash
-    # new_block_obj["init_value"] = new_block_data_object.init_value
-    # new_block_obj["init_destination"] = new_block_data_object.init_destination
-    # new_block_obj["tx_dataset"] = new_block_data_object.tx_dataset
-    # new_block_obj["block_nonce"] = new_block_data_object.block_nonce
-    # new_block_obj["block_hash"] = new_block_data_object.block_hash
     
     new_block_json_data = json.dumps(
         {"timestamp":new_block_data_object.timestamp, 
