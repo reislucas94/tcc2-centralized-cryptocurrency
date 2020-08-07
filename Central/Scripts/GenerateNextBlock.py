@@ -37,30 +37,3 @@ def get_init_destination():
 
 def get_tx_dataset():
     return [Transaction("39620880080","17040189003", 500.3, ""),Transaction("17040189003","39620880080", 500.3, "")]
-
-
-# hashInitValue = SHA256.new(bytearray(str(dataObj['initValue']), 'ascii')).hexdigest()
-# hashInitDestination = SHA256.new(bytearray(dataObj['initDestination'], 'ascii')).hexdigest()
-# hashInit = SHA256.new(bytearray(hashInitValue+hashInitDestination, 'ascii')).hexdigest()
-# hashDataSet = 'none'
-# #hashDataSet = SHA256.new(bytearray(dataObj['dataSet'], 'ascii')).hexdigest()
-# hashNonce = SHA256.new(bytearray(str(dataObj['nonce']), 'ascii')).hexdigest()
-
-# dataObj['blockHash'] = SHA256.new(bytearray(hashInit+hashDataSet+hashNonce, 'ascii')).hexdigest()
-
-# #While blockHash does not start with '000'...
-# while (dataObj['blockHash'][0] != '0') or (dataObj['blockHash'][1] != '0') or (dataObj['blockHash'][2] != '0'):
-#     dataObj['nonce']+=1
-#     hashNonce = SHA256.new(bytearray(str(dataObj['nonce']), 'ascii')).hexdigest()
-#     dataObj['blockHash'] = SHA256.new(bytearray(hashInit+hashDataSet+hashNonce, 'ascii')).hexdigest()
-
-# #Convert dataObj to json
-# data = json.dumps(dataObj)
-
-# file_out = open("Central/Databases/Blocks/block1.json", "w")
-# #Writes JSON to file
-# file_out.write(data)
-
-# print(dataObj['blockHash'])
-
-# print(dataObj)

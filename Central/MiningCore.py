@@ -41,19 +41,3 @@ def _get_txdataset_hash(tx_dataset):
     merkle_tree.create_tree()
 
     return merkle_tree.Get_Root_leaf()
-
-# def _get_txdataset_hash(tx_dataset):
-#     hashes = []
-#     for i in range(len(tx_dataset)):
-#         tx_hash = _get_tx_hash(list(tx_dataset)[i],tx_dataset[list(tx_dataset)[i]])
-#         hashes.append(tx_hash)
-#     hash_sum = ""
-#     for j in range(len(hashes)):
-#         hash_sum+=hashes[j]
-#     return SHA256.new(bytearray(hash_sum, 'ascii')).hexdigest()
-
-# def _get_tx_hash(tx_part:str, signature_part:str):
-#     hash_tx_part = SHA256.new(bytearray(tx_part, 'ascii')).hexdigest()
-#     hash_signature_part = SHA256.new(bytearray(signature_part, 'ascii')).hexdigest()
-#     hashed_tx = SHA256.new(bytearray(hash_tx_part+hash_signature_part, 'ascii')).hexdigest()
-#     return hashed_tx
